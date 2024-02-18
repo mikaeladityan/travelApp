@@ -30,16 +30,32 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $request->validate(
+            [
+                'firstName' => ['required', 'string', 'max:255'],
+                'lastName' => ['required', 'string', 'max:255'],
+                'username' => ['required', 'string', 'lowercase', 'min:3', 'max:15', 'alpha_num:ascii', 'unique:' . User::class],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ],
+            [
+                'username.required' => "Username tidak boleh kosong",
+                'username.unique' => "Username sudah terdaftar",
+                "username.min" => "Username minimal 3 huruf",
+                "username.max" => "Username maximal 15 huruf",
+                'firstName.required' => "Nama depan tidak boleh kosong",
+                'email.required' => "Email tidak boleh kosong",
+                'email.email' => "Format email salah, contoh : example@gmail.com",
+            ]
+        );
 
         $user = User::create([
-            'name' => $request->name,
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => 1, // default role for user is member (role id 1)
         ]);
 
         event(new Registered($user));
