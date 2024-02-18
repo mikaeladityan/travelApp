@@ -45,6 +45,7 @@ class RegisteredUserController extends Controller
                 "username.max" => "Username maximal 15 huruf",
                 'firstName.required' => "Nama depan tidak boleh kosong",
                 'email.required' => "Email tidak boleh kosong",
+                'email.unique' => "Email sudah terdaftar",
                 'email.email' => "Format email salah, contoh : example@gmail.com",
             ]
         );
