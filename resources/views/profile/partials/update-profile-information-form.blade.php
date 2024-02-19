@@ -4,17 +4,22 @@
             color-scheme: dark;
         }
     </style>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Pengaturan profil saya,') }}
+    <header class="w-full">
+        <h2 class="flex items-center justify-between text-lg font-medium text-gray-900 dark:text-gray-100">
+            <p>
+                {{ __('Pengaturan profil saya') }}
+            </p>
+            <p class="text-xs text-slate-300">
+                {{ $user->role->role }}
+            </p>
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Update profil anda dengan data terbaru dan sesuai') }}
+            {{ __('Update profil anda dengan data terbaru yang sesuai.') }}
         </p>
     </header>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
         <div class="md:grid md:grid-cols-2 md:gap-4">
@@ -22,8 +27,8 @@
                 {{-- Username --}}
                 <div>
                     <x-input-label for="username" :value="__('Username')" />
-                    <x-text-input id="username" name="username" type="text" class="block w-full mt-1" :value="old('username', $user->username)"
-                        required autocomplete="username" />
+                    <x-text-input id="username" name="username" type="text" class="block w-full mt-1"
+                        :value="old('username', $user->username)" required autocomplete="username" />
                     <x-input-error class="mt-2" :messages="$errors->get('username')" />
                 </div>
 
@@ -77,15 +82,18 @@
                 {{-- Photo --}}
                 <div class="w-full">
                     <div class="flex items-end justify-center gap-4">
-                        @if ($user->photo == null)
-                            <img src="{{ asset('/storage/user/images.png') }}" alt="travel-photo-default"
-                                class="w-3/12 rounded-lg shadow shadow-slate-100/40">
-                        @else
-                            <img src="{{ asset('/storage/user/' . $data->photo) }}"
-                                alt="Foto profil {{ $data->username }}"
-                                class="w-3/12 rounded-lg shadow shadow-slate-100/40">
-                        @endif
+                        <div
+                            class="relative flex items-center justify-center overflow-hidden rounded-lg shadow max-w-40 max-h-36 shadow-slate-100/40 ">
+                            @if ($user->photo == null)
+                                <img src="{{ asset('/storage/user/images.png') }}" alt="travel-photo-default"
+                                    class="w-full">
+                            @else
+                                <img src="{{ asset('/storage/' . $user->photo) }}"
+                                    alt="Foto profil {{ $user->username }}" class="w-full">
+                            @endif
+                        </div>
                         <div>
+                            <input type="hidden" name="oldPhoto" value="{{ $user->photo }}">
                             <x-input-label for="photo" :value="__('Foto Profil')" />
                             <x-text-input id="photo" name="photo" type="file"
                                 class="block w-full py-2 pl-3 mt-1 text-sm" :value="old('photo', $user->photo)" autocomplete="photo" />
@@ -95,7 +103,7 @@
                 </div>
 
                 {{-- Phone --}}
-                <div class="flex items-center justify-center w-full gap-3 mt-[1.4em]">
+                <div class="flex items-center justify-center w-full gap-3 mt-5">
                     <div class="w-full">
                         <x-input-label for="phone" :value="__('Telepon / Whatsapp')" />
                         <x-text-input id="phone" name="phone" type="text" class="block w-full mt-1"

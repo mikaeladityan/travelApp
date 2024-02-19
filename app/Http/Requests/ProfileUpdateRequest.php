@@ -20,7 +20,18 @@ class ProfileUpdateRequest extends FormRequest
             'lastName' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'lowercase', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'email' => ['required', 'string', 'lowercase', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'idCard' => ['max:15', 'min:12', Rule::unique(User::class)->ignore($this->user()->id)],
+            'idCard' => ['max:17', 'min:14', Rule::unique(User::class)->ignore($this->user()->id)],
+            'phone' => ['nullable'],
+            'instagram' => ['nullable'],
+            'tiktok' => ['nullable'],
+            'street' => ['nullable'],
+            'city' => ['nullable'],
+            'province' => ['nullable'],
+            'country' => ['nullable'],
+            'postCode' => ['nullable'],
+            'card' => ['nullable'],
+            'actived' => ['nullable'],
+            'born' => ['nullable'],
         ];
     }
 }
