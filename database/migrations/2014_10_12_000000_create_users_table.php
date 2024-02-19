@@ -25,13 +25,19 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('instagram')->nullable();
             $table->string('tiktok')->nullable();
+
             // Address
             $table->string('street')->nullable();
             $table->string('city')->nullable();
             $table->string('province')->nullable();
             $table->string('country')->nullable();
-            $table->string('post_code')->nullable();
+            $table->string('postCode')->nullable();
 
+            // ID Card
+            $table->string('card')->nullable();
+            $table->string('idCard')->nullable()->unique();
+            $table->date('actived')->nullable(); // Masa aktif
+            $table->date('born')->nullable();
 
             $table->foreignId('role_id')->default('1');
             $table->enum('status', ['active', 'banned'])->default('active');

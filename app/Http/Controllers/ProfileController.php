@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\LogActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,14 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        LogActivity::create([
+            "users" => Auth::user()->username,
+            "ip_address" => $request->ip(),
+            "url" => $request->url(),
+            "status" => "success",
+            "message" => "Update Profile"
+        ]);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
