@@ -40,4 +40,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // have many to one with roles coloumn fk is role_id
+    public function role()
+    {
+        return $this->belongsTo(Role::class, "role_id");
+    }
 }
